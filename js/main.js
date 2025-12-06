@@ -111,7 +111,6 @@ function update(dt) {
         replay.update();
         // Still allow particles to update visually during replay for flair
         updateParticles();
-        grid.update();
         return;
     }
 

@@ -4,6 +4,7 @@ import { player } from './player.js';
 import { bullets } from './bullets.js';
 import { ui } from './ui.js';
 import { createParticles } from './particles.js';
+import { grid } from './grid.js';
 
 export const replay = {
     data: [],
@@ -101,6 +102,15 @@ export const replay = {
         ui.updateScore();
         ui.updateLives();
         ui.updateBombs();
+
+        // Replay grid disturbance from player
+        if (this.currentFrame > 0) {
+            const prevFrame = this.data[this.currentFrame - 1];
+            const dist = Math.hypot(frame.p.x - prevFrame.p.x, frame.p.y - prevFrame.p.y);
+            if (dist > 0.5) {
+                grid.disturb(player.x, player.y, 100, 1, 'rgba(255,255,255,0.3)');
+            }
+        }
 
         // Playback Events (Particles, etc.)
         if (frame.ev && frame.ev.length > 0) {
