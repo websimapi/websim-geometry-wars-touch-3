@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Geometry Wars Touch</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%; 
+            overflow: hidden;
+            background: #000;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        #score {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 32px;
+            text-shadow: 0 0 10px #fff;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        #lives, #bombs {
+            position: fixed;
+            color: #fff;
+            left: 20px;
+            font-size: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 5px;
+        }
+
+        #lives {
+            top: 20px;
+        }
+
+        #bombs {
+            top: 50px;
+        }
+
+        .heart {
+            color: #ff3366;
+            text-shadow: 0 0 10px #ff3366;
+            animation: pulse 1.5s infinite;
+        }
+
+        .bomb {
+            filter: drop-shadow(0 0 5px #ffff00);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        #gameOver {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            font-size: 48px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        #restart {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 24px;
+            background: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #startScreen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 1000;
+        }
+
+        #startButton {
+            padding: 15px 30px;
+            font-size: 24px;
+            background: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="startScreen">
+        <h1>Geometry Wars Touch</h1>
+        <div style="margin: 20px;">
+            <label style="color: white;">
+                Graphics Quality:
+                <select id="graphicsQuality" style="margin-left: 10px; padding: 5px;">
+                    <option value="HD">High Quality</option>
+                    <option value="LD">Low Quality</option>
+                    <option value="VLD">Very Low Quality</option>
+                </select>
+            </label>
+        </div>
+        <button id="startButton">Start Game</button>
+    </div>
+    <div id="score">0</div>
+    <div id="lives"></div>
+    <div id="bombs"></div>
+    <div id="gameOver">
+        Game Over!<br>
+        Final Score: <span id="finalScore">0</span><br>
+        <button id="restart">Play Again</button>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <audio id="backgroundMusic" loop src="https://api.websim.ai/blobs/0192ccbc-8674-7bd7-8fbc-b3c63aadb8c0.wav"></audio>
+
+    <script type="module" src="js/main.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
