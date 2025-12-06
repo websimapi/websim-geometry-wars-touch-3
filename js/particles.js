@@ -1,10 +1,15 @@
 import { ctx } from './canvas.js';
 import { state } from './state.js';
 import { grid } from './grid.js';
+import { replay } from './replay.js';
 
 export const particles = [];
 
 export function createParticles(x, y, type) {
+    // Record event if recording
+    if (state.gameActive && !state.isReplaying) {
+        replay.addEvent('particles', { x, y, t: type });
+    }
     const baseColors = {
         'snake': ["0,255,255", "0,200,255", "100,255,255"],
         'square': ["0,255,0", "100,255,100", "150,255,150"],

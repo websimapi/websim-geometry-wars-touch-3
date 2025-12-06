@@ -3,16 +3,19 @@ import { enemies, Enemy, resetEnemies } from './enemies.js';
 import { player } from './player.js';
 import { bullets } from './bullets.js';
 import { ui } from './ui.js';
+import { createParticles } from './particles.js';
 
 export const replay = {
     data: [],
     currentFrame: 0,
     recording: false,
+    frameEvents: [],
 
     reset() {
         this.data = [];
         this.currentFrame = 0;
         this.recording = false;
+        this.frameEvents = [];
     },
 
     startRecording() {
@@ -26,12 +29,22 @@ export const replay = {
         // console.log("Replay recording stopped, frames:", this.data.length);
     },
 
+    addEvent(type, data) {
+        if (this.recording) {
+            this.frameEvents.push({ type, data });
+        }
+    },
+
     recordFrame() {
         if (!this.recording || !state.gameActive) return;
 
         // Create lightweight snapshot
         const frameData = {
-            p: { x: Math.round(player.x), y: Math.round(player.y) },
+            p: { 
+                x: Math.round(player.x), 
+                y: Math.round(player.y),
+                r: parseFloat(player.rotation.toFixed(2))
+            },
             e: enemies.map(e => ({
                 t: e.type,
                 x: Math.round(e.x),
@@ -45,10 +58,12 @@ export const replay = {
             sc: state.score,
             l: state.lives,
             bm: state.bombs,
-            en: Math.round(state.energyBar)
+            en: Math.round(state.energyBar),
+            ev: this.frameEvents // capture events
         };
 
         this.data.push(frameData);
+        this.frameEvents = []; // clear for next frame
     },
 
     startPlayback() {
@@ -77,6 +92,7 @@ export const replay = {
         // Restore State
         player.x = frame.p.x;
         player.y = frame.p.y;
+        player.rotation = frame.p.r || 0;
         state.score = frame.sc;
         state.lives = frame.l;
         state.bombs = frame.bm;
@@ -85,6 +101,16 @@ export const replay = {
         ui.updateScore();
         ui.updateLives();
         ui.updateBombs();
+
+        // Playback Events (Particles, etc.)
+        if (frame.ev && frame.ev.length > 0) {
+            frame.ev.forEach(event => {
+                if (event.type === 'particles') {
+                    // Temporarily allow particle creation
+                    createParticles(event.data.x, event.data.y, event.data.t);
+                }
+            });
+        }
 
         // Restore Bullets
         bullets.length = 0;
